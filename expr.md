@@ -1,7 +1,9 @@
 # Experiment trial
 
 ##  Download the dataset
-    
+
+    TODO: Understand the difficulty (size, length, typical SOTA result) of the following datasets
+
     1. WikiText-2 (WT2)
     2. WikiText-103 (WT103)
     3. enwik8 (Character)
@@ -24,10 +26,40 @@
 
 ### Character level enwik8 with LSTM
 
-Shortened (in epoch) trial
+#### Shortened (in epoch) trial
 + `python -u main.py --epochs 5 --nlayers 3 --emsize 400 --nhid 1840 --alpha 0 --beta 0 --dropoute 0 --dropouth 0.1 --dropouti 0.1 --dropout 0.4 --wdrop 0.2 --wdecay 1.2e-6 --bptt 200 --batch_size 128 --optimizer adam --lr 1e-3 --data data/enwik8 --save ENWIK8.pt --when 25 35`
 
-epoch 1 2600/3515, loss 1.39, ms/batch 122.49 ppl 3.95, bpc 2.0
+in ENWIK8-5.pt
+test loss 1.15 
+
+#### Vanilla
++ `python -u main.py --epochs 50 --nlayers 3 --emsize 400 --nhid 1840 --alpha 0 --beta 0 --dropoute 0 --dropouth 0.1 --dropouti 0.1 --dropout 0.4 --wdrop 0.2 --wdecay 1.2e-6 --bptt 200 --batch_size 128 --optimizer adam --lr 1e-3 --data data/enwik8 --save ENWIK8.pt --when 25 35`
+
+in ENWIK8-50.pt
+test loss 
+
+### Character level Penn Treebank (PTB) with LSTM
+
+#### Vanilla 
+
+python -u main.py --epochs 500 --nlayers 3 --emsize 200 --nhid 1000 --alpha 0 --beta 0 --dropoute 0 --dropouth 0.25 --dropouti 0.1 --dropout 0.1 --wdrop 0.5 --wdecay 1.2e-6 --bptt 150 --batch_size 128 --optimizer adam --lr 2e-3 --data data/pennchar --save PTBC.pt --when 300 400
+
+
+### Word level Penn Treebank (PTB) with LSTM
+
+#### Vanilla 
++ `python main.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB.pt`
++ `python finetune.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB.pt`
++ `python pointer.py --data data/penn --save PTB.pt --lambdasm 0.1 --theta 1.0 --window 500 --bptt 5000`
+
+### Word level WikiText-2 (WT2) with LSTM
+
+
+#### Vanilla 
+
++ `python main.py --epochs 750 --data data/wikitext-2 --save WT2.pt --dropouth 0.2 --seed 1882`
++ `python finetune.py --epochs 750 --data data/wikitext-2 --save WT2.pt --dropouth 0.2 --seed 1882`
++ `python pointer.py --save WT2.pt --lambdasm 0.1279 --theta 0.662 --window 3785 --bptt 2000 --data data/wikitext-2`
 
 ### What is ppl, bpc?
 
@@ -62,6 +94,8 @@ parser.add_argument(
     default=0.12785920428335693,
     help="linear mix between only pointer (1) and only vocab (0) distribution",
 )
+
+
 
 
 
