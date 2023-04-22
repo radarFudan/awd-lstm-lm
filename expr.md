@@ -36,15 +36,17 @@ test loss 1.15
 + `python -u main.py --epochs 50 --nlayers 3 --emsize 400 --nhid 1840 --alpha 0 --beta 0 --dropoute 0 --dropouth 0.1 --dropouti 0.1 --dropout 0.4 --wdrop 0.2 --wdecay 1.2e-6 --bptt 200 --batch_size 128 --optimizer adam --lr 1e-3 --data data/enwik8 --save ENWIK8.pt --when 25 35`
 
 in ENWIK8-50.pt
-test loss 
+test loss 1.02
 Somehow this code takes around 30 GB memory on GPU to run. 
 
 ### Character level Penn Treebank (PTB) with LSTM
 
 #### Vanilla 
 
-python -u main.py --epochs 500 --nlayers 3 --emsize 200 --nhid 1000 --alpha 0 --beta 0 --dropoute 0 --dropouth 0.25 --dropouti 0.1 --dropout 0.1 --wdrop 0.5 --wdecay 1.2e-6 --bptt 150 --batch_size 128 --optimizer adam --lr 2e-3 --data data/pennchar --save PTBC.pt --when 300 400
++ `python -u main.py --epochs 500 --nlayers 3 --emsize 200 --nhid 1000 --alpha 0 --beta 0 --dropoute 0 --dropouth 0.25 --dropouti 0.1 --dropout 0.1 --wdrop 0.5 --wdecay 1.2e-6 --bptt 150 --batch_size 128 --optimizer adam --lr 2e-3 --data data/pennchar --save PTBC.pt --when 300 400`
 
+test loss 
+Somehow this code takes around TODO GB memory on GPU to run. 
 
 ### Word level Penn Treebank (PTB) with LSTM
 
@@ -95,6 +97,10 @@ parser.add_argument(
     default=0.12785920428335693,
     help="linear mix between only pointer (1) and only vocab (0) distribution",
 )
+
+
+
+## What is the transformer's performance on these datasets?
 
 
 
