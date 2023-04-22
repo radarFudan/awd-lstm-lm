@@ -37,6 +37,7 @@ test loss 1.15
 
 in ENWIK8-50.pt
 test loss 
+Somehow this code takes around 30 GB memory on GPU to run. 
 
 ### Character level Penn Treebank (PTB) with LSTM
 
