@@ -54,11 +54,11 @@ After training, I don't keep the record, maybe I should make the output not only
 
 #### Vanilla 
 + `python main.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB.pt`
-+ `python finetune.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB.pt`
-+ `python pointer.py --data data/penn --save PTB.pt --lambdasm 0.1 --theta 1.0 --window 500 --bptt 5000`
++ `python finetune.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB_finetuned.pt`
++ `python pointer.py --data data/penn --save PTB_pointed.pt --lambdasm 0.1 --theta 1.0 --window 500 --bptt 5000`
 
 test loss
-1. 2GB GPU memory
+1. 2GB GPU memory (from aisci) to move PTB.pt
 2. 
 3. 
 
