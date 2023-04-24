@@ -57,10 +57,13 @@ After training, I don't keep the record, maybe I should make the output not only
 + `python finetune.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB_finetuned.pt`
 + `python pointer.py --data data/penn --save PTB_pointed.pt --lambdasm 0.1 --theta 1.0 --window 500 --bptt 5000`
 
-test loss
-1. 2GB GPU memory (from aisci) to move PTB.pt
+1. 2GB GPU memory (from aisci) to move PTB.pt, somehow it turned to 20GB occupation, somehow it out of memory...
+    train loss test loss 
+1.1 python main.py --batch_size 10 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB_smaller_BS.pt
 2. 
+    train loss test loss 
 3. 
+    train loss test loss 
 
 ### Word level WikiText-2 (WT2) with LSTM
 
@@ -70,6 +73,14 @@ test loss
 + `python main.py --epochs 750 --data data/wikitext-2 --save WT2.pt --dropouth 0.2 --seed 1882`
 + `python finetune.py --epochs 750 --data data/wikitext-2 --save WT2.pt --dropouth 0.2 --seed 1882`
 + `python pointer.py --save WT2.pt --lambdasm 0.1279 --theta 0.662 --window 3785 --bptt 2000 --data data/wikitext-2`
+
+1.  GPU memory (from aisci) , somehow it turned to 20GB occupation
+    train loss test loss 
+2. 
+    train loss test loss 
+3. 
+    train loss test loss 
+
 
 ### What is ppl, bpc?
 
