@@ -48,12 +48,19 @@ Somehow this code takes around 30 GB memory on GPU to run.
 test loss 
 Somehow this code takes around TODO GB memory on GPU to run. 
 
+After training, I don't keep the record, maybe I should make the output not only in terminal but also in record...
+
 ### Word level Penn Treebank (PTB) with LSTM
 
 #### Vanilla 
 + `python main.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB.pt`
 + `python finetune.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB.pt`
 + `python pointer.py --data data/penn --save PTB.pt --lambdasm 0.1 --theta 1.0 --window 500 --bptt 5000`
+
+test loss
+1. 2GB GPU memory
+2. 
+3. 
 
 ### Word level WikiText-2 (WT2) with LSTM
 
