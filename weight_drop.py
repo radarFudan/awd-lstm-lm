@@ -46,7 +46,7 @@ class WeightDrop(torch.nn.Module):
                 )
 
             # w seems to be a torch.Tensor not nn.Parameter
-            print("w is a {}".format(type(w)))
+            # print("w is a {}".format(type(w)))
             if isinstance(w, torch.Tensor) and not isinstance(w, Parameter):
                 w = Parameter(w)
             setattr(self.module, name_w, w)
