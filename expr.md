@@ -50,7 +50,7 @@ Somehow this code takes around TODO GB memory on GPU to run.
 
 After training, I don't keep the record, maybe I should make the output not only in terminal but also in record...
 
-### Word level Penn Treebank (PTB) with LSTM
+### Word level Penn Treebank (PTB) with LSTM - Stopped
 
 #### Vanilla 
 + `python main.py --batch_size 20 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB.pt`
@@ -58,14 +58,15 @@ After training, I don't keep the record, maybe I should make the output not only
 + `python pointer.py --data data/penn --save PTB_pointed.pt --lambdasm 0.1 --theta 1.0 --window 500 --bptt 5000`
 
 1. 2GB GPU memory (from aisci) to move PTB.pt, somehow it turned to 20GB occupation, somehow it out of memory...
-    train loss 4.28 test loss 4.27
+    train loss 4.03 test loss 4.19
 1.1 python main.py --batch_size 10 --data data/penn --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 500 --save PTB_smaller_BS.pt
+    3.99 4.19
 2. 
     train loss test loss 
 3. 
     train loss test loss 
 
-### Word level WikiText-2 (WT2) with LSTM
+### Word level WikiText-2 (WT2) with LSTM - Stopped
 
 
 #### Vanilla 
@@ -74,9 +75,14 @@ After training, I don't keep the record, maybe I should make the output not only
 + `python finetune.py --epochs 750 --data data/wikitext-2 --save WT2.pt --dropouth 0.2 --seed 1882`
 + `python pointer.py --save WT2.pt --lambdasm 0.1279 --theta 0.662 --window 3785 --bptt 2000 --data data/wikitext-2`
 
-1.  GPU memory (from gen) , somehow it turned to 20GB occupation, 36GB now...
-    train loss 4.00 test loss 4.34
-2. 
+default batchsize is 80
+1.  GPU memory exceed failed
+    train loss 3.98 test loss 4.33
+1.1 `python main.py --batch_size 20 --epochs 750 --data data/wikitext-2 --save WT2_smaller_BS.pt --dropouth 0.2 --seed 1882`
+    train loss test loss 
+    Again exceed memory
+    The memory bug might be related to flatten_parameters https://github.com/salesforce/awd-lstm-lm/issues/120
+2. `python finetune.py --batch_size 20 --epochs 750 --data data/wikitext-2 --save WT2_smaller_BS_finetuned.pt --dropouth 0.2 --seed 1882`
     train loss test loss 
 3. 
     train loss test loss 
@@ -95,32 +101,19 @@ $ppl = 2^{cross\ entropy}, bpc = \log_2(Perplexity)$
 
 LSTM, 
 dropout on input, hidden, output
-SplitCrossEntropyLoss calculates an approximate softmax, don't understand
+SplitCrossEntropyLoss calculates an approximate softmax, 
 weight drop, - regularization
 
-what's the purpose of this pointer code? 
+what's the purpose of this pointer code? Introduce pointer loss
 In pointer, there is bptt, which is the sequence length. 
 However, there is also a pointer window length, what's this? 
 
-What is this theta, and the following lambda sm
-parser.add_argument(
-    "--theta",
-    type=float,
-    default=0.6625523432485668,
-    help="mix between uniform distribution and pointer softmax distribution over previous words",
-)
-parser.add_argument(
-    "--lambdasm",
-    type=float,
-    default=0.12785920428335693,
-    help="linear mix between only pointer (1) and only vocab (0) distribution",
-)
 
 
 
 ## What is the transformer's performance on these datasets?
 
-
+TODO
 
 
 
