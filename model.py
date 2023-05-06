@@ -180,3 +180,33 @@ class RNNModel(nn.Module):
                 ).zero_()
                 for l in range(self.nlayers)
             ]
+
+    # def flatten_parameters(self):
+    #     if self.rnn_type in ["LSTM", "QRNN", "GRU"]:
+    #         for rnn in self.rnns:
+    #             if rnn is not WeightDrop:
+    #                 rnn.flatten_parameters()
+
+
+def init_hidden(model, bsz):
+    weight = next(model.parameters()).data
+    if model.rnn_type == "LSTM":
+        return [
+            (
+                weight.new(
+                    1,
+                    bsz,
+                    model.nhid
+                    if l != model.nlayers - 1
+                    else (model.ninp if model.tie_weights else model.nhid),
+                ).zero_(),
+                weight.new(
+                    1,
+                    bsz,
+                    model.nhid
+                    if l != model.nlayers - 1
+                    else (model.ninp if model.tie_weights else model.nhid),
+                ).zero_(),
+            )
+            for l in range(model.nlayers)
+        ]

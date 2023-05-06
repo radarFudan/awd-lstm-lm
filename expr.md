@@ -76,10 +76,10 @@ After training, I don't keep the record, maybe I should make the output not only
 + `python pointer.py --save WT2.pt --lambdasm 0.1279 --theta 0.662 --window 3785 --bptt 2000 --data data/wikitext-2`
 
 default batchsize is 80
-1.  GPU memory exceed failed
+1.  GPU memory exceed failed, default batch size is 80.
     train loss 3.98 test loss 4.33
 1.1 `python main.py --batch_size 20 --epochs 750 --data data/wikitext-2 --save WT2_smaller_BS.pt --dropouth 0.2 --seed 1882`
-    train loss test loss 
+    train loss  test loss 
     Again exceed memory
     The memory bug might be related to flatten_parameters https://github.com/salesforce/awd-lstm-lm/issues/120
 2. `python finetune.py --batch_size 20 --epochs 750 --data data/wikitext-2 --save WT2_smaller_BS_finetuned.pt --dropouth 0.2 --seed 1882`
@@ -88,32 +88,24 @@ default batchsize is 80
     train loss test loss 
 
 
-### What is ppl, bpc?
-
-PPL, perplexity
-
-In information theory, perplexity is a measurement of how well a probability distribution or probability model predicts a sample. It may be used to compare probability models. A low perplexity indicates the probability distribution is good at predicting the sample.
-
-$ppl = 2^{cross\ entropy}, bpc = \log_2(Perplexity)$
-
-
 ### what’s the component that make it works?
 
 LSTM, 
-dropout on input, hidden, output
+Dropout on input, hidden, output
 SplitCrossEntropyLoss calculates an approximate softmax, 
-weight drop, - regularization
 
-what's the purpose of this pointer code? Introduce pointer loss
+What's the purpose of this pointer code? Introduce pointer loss.
 In pointer, there is bptt, which is the sequence length. 
 However, there is also a pointer window length, what's this? 
 
-
-
-
 ## What is the transformer's performance on these datasets?
 
-TODO
+1. Transformer-XL
+
+Method | enwiki8 | text8 | One Billion Word | WT-103 | PTB (w/o finetuning)
+-- | -- | -- | -- | -- | -- 
+Previous Best | 1.06 | 1.13 | 23.7 | 20.5 | 55.5
+Transformer-XL | **0.99** | **1.08** | **21.8** | **18.3** | **54.5**
 
 
 

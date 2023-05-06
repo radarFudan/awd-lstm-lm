@@ -8,6 +8,8 @@ import torch.nn as nn
 import data
 import model
 
+from model import init_hidden
+
 from utils import batchify, get_batch, repackage_hidden
 
 parser = argparse.ArgumentParser(
@@ -165,6 +167,7 @@ model = model.RNNModel(
     args.wdrop,
     args.tied,
 )
+# model.flatten_parameters()
 ###
 if args.resume:
     print("Resuming model ...")
@@ -199,7 +202,11 @@ if not criterion:
     criterion = SplitCrossEntropyLoss(args.emsize, splits=splits, verbose=False)
 ###
 if args.cuda:
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # device = torch.device("cuda:0,1" if torch.cuda.is_available() else "cpu")
     model = model.cuda()
+    model = nn.DataParallel(model, dim=1)
+    model.to(device)
     criterion = criterion.cuda()
 ###
 params = list(model.parameters()) + list(criterion.parameters())
@@ -223,13 +230,17 @@ def evaluate(data_source, batch_size=10):
         model.reset()
     total_loss = 0
     ntokens = len(corpus.dictionary)
-    hidden = model.init_hidden(batch_size)
+    # hidden = model.init_hidden(batch_size)
+    hidden = init_hidden(model.module, batch_size)
     for i in range(0, data_source.size(0) - 1, args.bptt):
         data, targets = get_batch(data_source, i, args, evaluation=True)
-        output, hidden = model(data, hidden)
+        output, hidden = model.module(data, hidden)
+
         total_loss += (
             len(data)
-            * criterion(model.decoder.weight, model.decoder.bias, output, targets).data
+            * criterion(
+                model.module.decoder.weight, model.module.decoder.bias, output, targets
+            ).data
         )
         hidden = repackage_hidden(hidden)
     return total_loss.item() / len(data_source)
@@ -242,7 +253,8 @@ def train():
     total_loss = 0
     start_time = time.time()
     ntokens = len(corpus.dictionary)
-    hidden = model.init_hidden(args.batch_size)
+    # hidden = model.init_hidden(args.batch_size)
+    hidden = init_hidden(model.module, args.batch_size)
     batch, i = 0, 0
     while i < train_data.size(0) - 1 - 1:
         bptt = args.bptt if np.random.random() < 0.95 else args.bptt / 2.0
@@ -261,8 +273,12 @@ def train():
         hidden = repackage_hidden(hidden)
         optimizer.zero_grad()
 
-        output, hidden, rnn_hs, dropped_rnn_hs = model(data, hidden, return_h=True)
-        raw_loss = criterion(model.decoder.weight, model.decoder.bias, output, targets)
+        output, hidden, rnn_hs, dropped_rnn_hs = model.module(
+            data, hidden, return_h=True
+        )
+        raw_loss = criterion(
+            model.module.decoder.weight, model.module.decoder.bias, output, targets
+        )
 
         loss = raw_loss
         # Activiation Regularization
